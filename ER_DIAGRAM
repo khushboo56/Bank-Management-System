@@ -1,0 +1,56 @@
+Entities:
+1. Customers
+   - CustomerID (PK)
+   - First Name
+   - Last Name
+   - Date of Birth
+   - Contact Information
+   - Address
+
+2. Appointments
+   - AppointmentID (PK)
+   - CustomerID (FK)
+   - EmployeeID (FK)
+   - Service Type
+   - Appointment Date and Time
+   - Status
+
+3. Bank Employees
+   - EmployeeID (PK)
+   - First Name
+   - Last Name
+   - Department
+   - Contact Information
+
+4. Accounts
+   - AccountID (PK)
+   - CustomerID (FK)
+   - Account Type
+   - Account Balance
+   - Status
+
+5. Transactions
+   - TransactionID (PK)
+   - AccountID (FK)
+   - Transaction Type
+   - Transaction Amount
+   - Transaction Date and Time
+
+6. Loans
+   - LoanID (PK)
+   - CustomerID (FK)
+   - Loan Type
+   - Loan Amount
+   - Loan Status
+
+Relationships:
+- One Customer can have Many Appointments (1:N)
+- Many Appointments can be associated with One Customer (N:1)
+- Many Appointments can be assigned to One Bank Employee (N:1)
+- One Bank Employee can have Many Appointments (1:N)
+- One Customer can have One Account (1:1)
+- One Account can be linked to One Customer (1:1)
+- Many Transactions can be associated with One Account (N:1)
+- One Account can have Many Transactions (1:N)
+- Many Loans can be submitted by One Customer (N:1)
+- One Customer can submit Many Loans (1:N)

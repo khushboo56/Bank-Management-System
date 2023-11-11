@@ -1,0 +1,6 @@
+have to expand frontend python code to make it more informative and all tables and procedures
+
+triggers were not working and were creating error...
+so have to read triggers and procedures..
+
+

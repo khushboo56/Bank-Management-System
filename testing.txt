@@ -1,0 +1,42 @@
+-- Insert sample customer records
+INSERT INTO Customers (FirstName, LastName, DateOfBirth, ContactInformation, Address)
+VALUES
+    ('John', 'Doe', '1985-05-10', 'john.doe@email.com', '123 Main St, City'),
+    ('Jane', 'Smith', '1990-08-15', 'jane.smith@email.com', '456 Elm St, Town'),
+    ('Bob', 'Johnson', '1980-12-03', 'bob.johnson@email.com', '789 Oak St, Village');
+
+-- Insert sample appointment records
+INSERT INTO Appointments (CustomerID, EmployeeID, ServiceType, AppointmentDateTime, Status)
+VALUES
+    (1, 1, 'Deposit', '2023-03-20 09:30:00', 'Pending'),
+    (2, 2, 'Loan', '2023-03-21 14:00:00', 'Confirmed'),
+    (3, 1, 'Consultation', '2023-03-22 10:45:00', 'Pending');
+
+
+-- Sample appointment scheduling for Customer 1 with Employee 1
+CALL CreateAppointment(1, 1, 'Deposit', '2023-03-25 14:00:00');
+-- Verify the result: check the Appointments table
+SELECT * FROM Appointments WHERE CustomerID = 1;
+
+-- Sample appointment scheduling for Customer 2 with Employee 2
+CALL CreateAppointment(2, 2, 'Loan', '2023-03-26 10:30:00');
+-- Verify the result: check the Appointments table
+SELECT * FROM Appointments WHERE CustomerID = 2;
+
+
+-- Sample customer records
+INSERT INTO Customers (FirstName, LastName, DateOfBirth, ContactInformation, Address)
+VALUES ('Alice', 'Johnson', '1989-04-15', 'alice.johnson@email.com', '123 Oak St, City');
+
+-- Sample bank employee records
+INSERT INTO BankEmployees (FirstName, LastName, Department)
+VALUES ('Emily', 'Smith', 'Teller');
+
+
+-- Simulate scheduling appointments for Customer 1
+CALL CreateAppointment(1, 1, 'Deposit', '2023-03-30 10:00:00');
+CALL CreateAppointment(1, 1, 'Withdrawal', '2023-03-30 14:00:00');
+CALL CreateAppointment(1, 1, 'Loan', '2023-03-30 15:30:00');
+CALL CreateAppointment(1, 2, 'Consultation', '2023-03-30 16:30:00');
+
+
