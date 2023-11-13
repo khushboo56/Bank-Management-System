@@ -120,3 +120,145 @@ BEGIN
 END //
 DELIMITER ;
 
+--not implemented
+
+-- Procedure to Deposit Money into a Savings Account
+DELIMITER //
+CREATE PROCEDURE DepositSavingsAccount(
+    IN p_AccountID INT,
+    IN p_Amount DECIMAL(10, 2)
+)
+BEGIN
+    UPDATE SavingsAccounts
+    SET Balance = Balance + p_Amount
+    WHERE AccountID = p_AccountID;
+    -- You may want to add logic to calculate and credit interest here
+END //
+DELIMITER ;
+
+-- Trigger to Enforce Draft Limit for Savings Accounts
+DELIMITER //
+CREATE TRIGGER EnforceDraftLimitSavings
+BEFORE INSERT ON Transactions
+FOR EACH ROW
+BEGIN
+    IF NEW.TransactionType = 'Draft' THEN
+        DECLARE savingsBalance DECIMAL(10, 2);
+        SET savingsBalance = (SELECT Balance FROM SavingsAccounts WHERE AccountID = NEW.AccountID);
+        IF NEW.TransactionAmount > savingsBalance THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Insufficient balance for draft.';
+        END IF;
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE UpdateCustomerPassword(
+    IN p_CustomerID INT,
+    IN p_NewPassword VARCHAR(255)
+)
+BEGIN
+    UPDATE Customers
+    SET Password = p_NewPassword
+    WHERE CustomerID = p_CustomerID;
+END //
+DELIMITER ;
+
+
+
+--implemented
+DELIMITER //
+CREATE PROCEDURE ApplyForLoan(
+    IN p_CustomerID INT,
+    IN p_LoanAmount DECIMAL(10, 2)
+)
+BEGIN
+    INSERT INTO LoanApplications (CustomerID, LoanAmount) VALUES (p_CustomerID, p_LoanAmount);
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE VerifyLoanApplication(
+    IN p_ApplicationID INT,
+    IN p_Status ENUM('Approved', 'Rejected'),
+    IN p_VerificationNotes TEXT
+)
+BEGIN
+    UPDATE LoanApplications
+    SET Status = p_Status, VerificationNotes = p_VerificationNotes
+    WHERE ApplicationID = p_ApplicationID;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE ApproveLoanApplication(
+    IN p_ApplicationID INT,
+    IN p_Status ENUM('Approved', 'Rejected'),
+    IN p_AdminNotes TEXT
+)
+BEGIN
+    UPDATE LoanApplications
+    SET Status = p_Status, AdminNotes = p_AdminNotes
+    WHERE ApplicationID = p_ApplicationID;
+END //
+DELIMITER ;
+
+
+# Function to update customer password
+def update_customer_password(customer_id, new_password):
+    sql = "CALL UpdateCustomerPassword(%s, %s)"
+    values = (customer_id, new_password)
+    execute_query(sql, values)
+    print("Password updated successfully.")
+
+DELIMITER //
+CREATE PROCEDURE SetStrongPassword(
+    IN p_CustomerID INT,
+    IN p_NewPassword VARCHAR(255)
+)
+BEGIN
+    DECLARE uppercase_required TINYINT;
+    DECLARE lowercase_required TINYINT;
+    DECLARE digit_required TINYINT;
+    DECLARE special_required TINYINT;
+    
+    SET uppercase_required = 1; -- Set to 1 to require at least one uppercase letter
+    SET lowercase_required = 1; -- Set to 1 to require at least one lowercase letter
+    SET digit_required = 1;     -- Set to 1 to require at least one digit
+    SET special_required = 1;   -- Set to 1 to require at least one special character
+    
+    IF LENGTH(p_NewPassword) < 8 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Password must be at least 8 characters long.';
+    ELSEIF uppercase_required = 1 AND NOT REGEXP_LIKE(p_NewPassword, '[A-Z]') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Password must contain at least one uppercase letter.';
+    ELSEIF lowercase_required = 1 AND NOT REGEXP_LIKE(p_NewPassword, '[a-z]') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Password must contain at least one lowercase letter.';
+    ELSEIF digit_required = 1 AND NOT REGEXP_LIKE(p_NewPassword, '[0-9]') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Password must contain at least one digit.';
+    ELSEIF special_required = 1 AND NOT REGEXP_LIKE(p_NewPassword, '[!@#$%^&*()]') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Password must contain at least one special character.';
+    ELSE
+        UPDATE Customers
+        SET Password = p_NewPassword
+        WHERE CustomerID = p_CustomerID;
+    END IF;
+END //
+DELIMITER ;
+
+# Function to set a strong password for a customer
+def set_strong_password(customer_id, new_password):
+    sql = "CALL SetStrongPassword(%s, %s)"
+    values = (customer_id, new_password)
+    
+    try:
+        execute_query(sql, values)
+        print("Strong password set successfully.")
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")

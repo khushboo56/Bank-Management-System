@@ -11,14 +11,6 @@ CREATE TABLE Customers (
     Address TEXT
 );
 
-CREATE TABLE Customers (
-    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
-    FirstName VARCHAR(255),
-    LastName VARCHAR(255),
-    DateOfBirth DATE,
-    ContactInformation VARCHAR(255),
-    Address TEXT
-);
 
 CREATE TABLE Appointments (
     AppointmentID INT AUTO_INCREMENT PRIMARY KEY,
@@ -64,5 +56,85 @@ CREATE TABLE Loans (
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
 
+ALTER TABLE Customers
+ADD COLUMN Username VARCHAR(255) UNIQUE,
+ADD COLUMN Password VARCHAR(255);
+
+UPDATE Customers
+SET Username = 'default_username', Password = 'default_password'
+WHERE Username IS NULL OR Password IS NULL;
+
+
+
+DESCRIBE accounts;
+
+
+-- Add the 'AccountType' column to the 'accounts' table if it doesn't exist
+INSERT INTO accounts (AccountType) 
+SELECT NULL 
+FROM (SELECT 1) dummy
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_name = 'accounts' AND column_name = 'AccountType'
+);
+
+-- If the column was added, update the values
+UPDATE accounts
+SET AccountType = 'Savings'
+WHERE AccountType IS NULL;
+
+
+
+CREATE TABLE Customers (
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(255) UNIQUE,
+    Password VARCHAR(255),
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    DateOfBirth DATE,
+    ContactInformation VARCHAR(255),
+    Address TEXT
+);
+
+//new one customer table
+
+DROP TABLE Loans;
+
+
+CREATE TABLE LoanApplications (
+    ApplicationID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerID INT,
+    LoanAmount DECIMAL(10, 2),
+    Status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    VerificationNotes TEXT,
+    AdminNotes TEXT,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+
+ALTER TABLE Accounts
+ADD AccountType ENUM('Savings', 'Current') NOT NULL;
+
+
+CREATE TABLE SavingsAccounts (
+    AccountID INT PRIMARY KEY,
+    InterestRate DECIMAL(5, 4),
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);
+
+CREATE TABLE CurrentAccounts (
+    AccountID INT PRIMARY KEY,
+    OverdraftLimit DECIMAL(10, 2),
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+);
+
+CREATE TABLE Admins (
+    AdminID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    Username VARCHAR(255) UNIQUE,
+    Password VARCHAR(255)
+);
 
 
