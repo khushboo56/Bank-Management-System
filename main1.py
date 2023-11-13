@@ -63,11 +63,11 @@ def execute_select_query(sql, values=None):
 
 def is_username_available(role, username):
     if role == "admin":
-        sql = "SELECT COUNT(*) FROM Admins WHERE Username = %s"
+        sql = "SELECT COUNT(*) FROM admins WHERE Username = %s"
     elif role == "employee":
-        sql = "SELECT COUNT(*) FROM BankEmployees WHERE Username = %s"
+        sql = "SELECT COUNT(*) FROM bankemployees WHERE Username = %s"
     elif role == "customer":
-        sql = "SELECT COUNT(*) FROM Customers WHERE Username = %s"
+        sql = "SELECT COUNT(*) FROM customers WHERE Username = %s"
     else:
         return False
 
@@ -80,13 +80,13 @@ def is_username_available(role, username):
 def sign_up(role, username, password, **additional_info):
     if is_username_available(role, username):
         if role == "admin":
-            sql = "INSERT INTO Admins (Username, Password, FirstName, LastName) VALUES (%s, %s, %s, %s)"
+            sql = "INSERT INTO admins (Username, Password, FirstName, LastName) VALUES (%s, %s, %s, %s)"
             values = (username, password, additional_info.get("first_name", ""), additional_info.get("last_name", ""))
         elif role == "employee":
-            sql = "INSERT INTO BankEmployees (Username, Password, FirstName, LastName, Department) VALUES (%s, %s, %s, %s, %s)"
+            sql = "INSERT INTO bankemployees (Username, Password, FirstName, LastName, Department) VALUES (%s, %s, %s, %s, %s)"
             values = (username, password, additional_info.get("first_name", ""), additional_info.get("last_name", ""), additional_info.get("department", ""))
         elif role == "customer":
-            sql = "INSERT INTO Customers (Username, Password, FirstName, LastName, DateOfBirth, ContactInformation, Address) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO customers (Username, Password, FirstName, LastName, DateOfBirth, ContactInformation, Address) VALUES (%s, %s, %s, %s, %s, %s, %s)"
             values = (username, password, additional_info.get("first_name", ""), additional_info.get("last_name", ""), additional_info.get("dob", ""), additional_info.get("contact_info", ""), additional_info.get("address", ""))
         else:
             return False
@@ -183,11 +183,11 @@ def approve_loan_application(application_id, status, admin_notes):
 # Function to check login credentials
 def login(role, username, password):
     if role == "admin":
-        sql = "SELECT AdminID FROM Admins WHERE Username = %s AND Password = %s"
+        sql = "SELECT AdminID FROM admins WHERE Username = %s AND Password = %s"
     elif role == "employee":
-        sql = "SELECT EmployeeID FROM BankEmployees WHERE Username = %s AND Password = %s"
+        sql = "SELECT EmployeeID FROM bankemployees WHERE Username = %s AND Password = %s"
     elif role == "customer":
-        sql = "SELECT CustomerID FROM Customers WHERE Username = %s AND Password = %s"
+        sql = "SELECT CustomerID FROM customers WHERE Username = %s AND Password = %s"
     else:
         return None
 
