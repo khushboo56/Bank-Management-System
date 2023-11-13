@@ -20,6 +20,7 @@ CREATE TABLE Appointments (
     AppointmentDateTime DATETIME,
     Status VARCHAR(20),
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+    FOREIGN KEY (EmployeeID) REFERENCES BankEmployees(EmployeeID)
 );
 
 CREATE TABLE BankEmployees (
@@ -47,14 +48,7 @@ CREATE TABLE Transactions (
     FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
 );
 
-CREATE TABLE Loans (
-    LoanID INT AUTO_INCREMENT PRIMARY KEY,
-    CustomerID INT,
-    LoanType VARCHAR(255),
-    LoanAmount DECIMAL(10, 2),
-    LoanStatus VARCHAR(20),
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
-);
+
 
 ALTER TABLE Customers
 ADD COLUMN Username VARCHAR(255) UNIQUE,
