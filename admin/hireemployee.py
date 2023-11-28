@@ -21,6 +21,7 @@ def ap1(query,cur):
     add_employee=("INSERT INTO employees "
     "(emp_no,birth_date,first_name,last_name,gender,hire_date) "
     "VALUES (%s,%s,%s,%s,%s,%s)")
+
     data_employee=(emp_no,birth_date,first_name,last_name,gender,hire_date)
     try:
         cur.execute(add_employee, data_employee)

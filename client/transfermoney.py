@@ -47,3 +47,88 @@ def cp6(conn,cur,acc_type,acc_no,balance):
 
         else:
             print("Cancelled transfer")
+
+""" import mysql.connector
+from tools import dataentering
+
+# Establish connection
+connection = mysql.connector.connect(
+    host="your_host",
+    user="your_username",
+    password="your_password",
+    database="your_database"
+)
+
+# Create a cursor object using the connection
+cursor = connection.cursor()
+
+# Create the TransferMoney procedure
+transfer_money_procedure = """
+"""
+DELIMITER //
+
+CREATE PROCEDURE TransferMoney(
+    IN acc_no_sender INT,
+    IN acc_no_receiver INT,
+    IN balance DECIMAL(10, 2)
+)
+BEGIN
+    DECLARE transfer_amt DECIMAL(10, 2);
+    DECLARE overdraft DECIMAL(10, 2);
+    DECLARE acc_type_sender VARCHAR(50);
+    DECLARE acc_type_receiver VARCHAR(50);
+    DECLARE fname VARCHAR(50);
+    DECLARE lname VARCHAR(50);
+
+    SELECT acc_type INTO acc_type_sender FROM clients WHERE acc_no = acc_no_sender;
+    SELECT acc_type INTO acc_type_receiver, first_name, last_name FROM clients WHERE acc_no = acc_no_receiver;
+
+    IF acc_type_receiver = 'S' THEN
+        SET acc_type_receiver = 'savings';
+    ELSEIF acc_type_receiver = 'C' THEN
+        SET acc_type_receiver = 'current';
+    END IF;
+
+    SELECT balance INTO transfer_amt, overdraft FROM your_table WHERE conditions;  -- Fetch transfer_amt and overdraft
+
+    -- Proceed with the transfer logic as needed based on your requirements
+
+END //
+
+DELIMITER ;
+"""
+"""
+# Execute the procedure creation statement
+cursor.execute(transfer_money_procedure, multi=True)
+
+# Commit the changes
+connection.commit()
+
+# Function to transfer money
+def transfer_money(conn, cur, acc_no_sender, acc_no_receiver, balance):
+    # Call the TransferMoney procedure
+    try:
+        cursor.callproc('TransferMoney', (acc_no_sender, acc_no_receiver, balance))
+        connection.commit()
+        print("Successfully transferred currency\n")
+
+    except mysql.connector.Error as err:
+        print(err.msg)
+        print("Error occurred during the transfer process.")
+
+# Call the transfer_money function
+try:
+    acc_no_sender = 123  # Replace with the actual sender's account number
+    acc_no_receiver = 456  # Replace with the actual receiver's account number
+    balance = 1000  # Replace with the actual balance to transfer
+
+    transfer_money(connection, cursor, acc_no_sender, acc_no_receiver, balance)
+
+except mysql.connector.Error as err:
+    print(err.msg)
+
+finally:
+    # Close connections
+    cursor.close()
+    connection.close()
+"""

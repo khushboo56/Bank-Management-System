@@ -2,6 +2,7 @@ from admin import hireemployee
 from admin import fireemployee
 from admin import editemployee
 from admin import showemployee
+from initialization import setup_admin
 def ap(query,conn):
     print("\nWelcome Admin!!")
     
@@ -14,6 +15,7 @@ def ap(query,conn):
         print("\nInput 0 to quit.")
         a=input("Enter choice:")
         if a=='1':
+            #setup_admin.hire_employee()
             hireemployee.ap1(query,conn)
         elif a=='2':
             fireemployee.ap2(query,conn)

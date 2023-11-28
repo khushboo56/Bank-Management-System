@@ -2,6 +2,7 @@ from initialization import setup
 from initialization import check
 from panels import accounttype
 from tools import connection
+flag = True
 while True:
     print("1.Continue")
     print("2.Quit")
@@ -12,7 +13,7 @@ while True:
             accounttype.acctype(query,cur)
             break
         else:
-            setup.setup()
+            setup.setup(flag)
     elif a == "2":
         print("Shutting down the program")
         break

@@ -10,8 +10,9 @@ conn=None
 cursor=None
 
 TABLES = {}
+
 TABLES['employees'] = (
-    "CREATE TABLE `employees` ("
+    "CREATE TABLE IF NOT EXISTS `employees` ("
     "  `emp_no` int(5) NOT NULL ,"
     "  `birth_date` date NOT NULL,"
     "  `first_name` varchar(15) NOT NULL,"
@@ -22,7 +23,7 @@ TABLES['employees'] = (
     ") ")
 
 TABLES['clients'] = (
-    "CREATE TABLE `clients` ("
+    "CREATE TABLE IF NOT EXISTS`clients` ("
     "  `acc_no` int NOT NULL PRIMARY KEY,"
     "  `type` enum('S','C') NOT NULL,"
     "  `first_name` varchar(15) NOT NULL,"
@@ -37,7 +38,7 @@ TABLES['clients'] = (
 )
 
 TABLES['empass'] = (
-    "CREATE TABLE `empass` ("
+    "CREATE TABLE IF NOT EXISTS `empass` ("
     "  `emp_no` int(5) NOT NULL,"
     "  `pass` varchar(8) NOT NULL,"
     "  PRIMARY KEY (`emp_no`)"
@@ -46,7 +47,7 @@ TABLES['empass'] = (
 
 
 TABLES['savings'] = (
-    "CREATE TABLE `savings` ("
+    "CREATE TABLE IF NOT EXISTS `savings` ("
     "  `acc_no` int(5) NOT NULL,"
     "  `balance` int NOT NULL,"
     "  `loan` enum('YES','NO') NOT NULL,"
@@ -55,7 +56,7 @@ TABLES['savings'] = (
 )
 
 TABLES['current'] = (
-    "CREATE TABLE `current` ("
+    "CREATE TABLE IF NOT EXISTS `current` ("
     "  `acc_no` int(5) NOT NULL,"
     "  `balance` int NOT NULL,"
     "  `overdraft` enum('YES','NO') NOT NULL,"
@@ -64,7 +65,7 @@ TABLES['current'] = (
 )
 
 TABLES['loan'] = (
-    "CREATE TABLE `loan` ("
+    "CREATE TABLE IF NOT EXISTS `loan` ("
     "  `acc_no` int(5) NOT NULL,"
     "  `loan_type` enum('PL','HL','EL','TL','BL') NOT NULL,"
     "  `loan_amt` int NOT NULL,"
@@ -77,7 +78,7 @@ TABLES['loan'] = (
 )
 
 TABLES['overdraft']=(
-    "CREATE TABLE `overdraft` ("
+    "CREATE TABLE IF NOT EXISTS `overdraft` ("
     "  `acc_no` int(5) NOT NULL,"
     "  `overdraft_amt` int NOT NULL,"
     "  `od_with_interest_remaining` int NOT NULL,"
@@ -86,7 +87,7 @@ TABLES['overdraft']=(
 )
 
 TABLES['cash_in_hand']=(
-    "CREATE TABLE `cash_in_hand` ("
+    "CREATE TABLE IF NOT EXISTS`cash_in_hand` ("
     "  `acc_no` int(5) NOT NULL,"
     "  `cash_in_hand` int NOT NULL,"
     "  PRIMARY KEY (`acc_no`)"
@@ -181,8 +182,7 @@ def setup():
         print("\n\n-----------------Welcome to the Project!!!-------------------")
         print("This is the setup process which runs when the user uses the program for the first time.")
         print("\n----------------------Database Setup------------------------\n")
-        print("1.Mysql 8.0 (Dependency MYSQL)")
-      #  print("2.Standalone (Data files)")
+        print("1.Mysql ")
         print("0.Cancel operation\n")
         ans2=input("Do you want to store the data? (1/0): ")
         if ans2 == "0":
@@ -191,10 +191,8 @@ def setup():
             mysqlsetup()
             if existing==7:
                 continue
-       # elif ans2=="2":
-        #    print("\nThis is under development :). Please use mysql till then...")
         else:
-            print("\nWrong input, (1/2).........")
+            print("\nWrong input, (1/0).........")
     else: 
         if querycheck():
             return True
